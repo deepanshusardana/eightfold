@@ -85,7 +85,7 @@ ul li:hover {
 
 .suggestions li {
   overflow: hidden;
-  height: 0;
+  /* height: 0; */
 }
 
 .highlight {
@@ -96,9 +96,9 @@ ul li:hover {
   display: none;
 }
 
-input[type="search"]:focus + .suggestions li {
+/* input[type="search"]:focus + .suggestions li {
   height: 20px;
-}
+} */
 
 .byline {
   text-align: center;

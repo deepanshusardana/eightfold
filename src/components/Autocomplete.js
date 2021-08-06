@@ -20,6 +20,7 @@ export class Autocomplete extends Component {
       userInput: ""
     };
     this.autocompleteSearchDebounced = debounce(debounceTime, this.autocompleteSearch);
+    this.onClick = this.onClick.bind(this);
   }
 
   autocompleteSearch = async (userInput) => {
@@ -138,7 +139,7 @@ export class Autocomplete extends Component {
               }
 
               return (
-                <li key={index} onClick={onClick} className={className}>
+                <li key={index} onMouseDown={onClick} className={className}>
                   {suggestion}
                 </li>
               );
