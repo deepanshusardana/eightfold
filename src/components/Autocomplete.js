@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import axios from 'axios';
 import { debounce } from "throttle-debounce";
 
+const debounceTime = 250; //this is configurable
 export class Autocomplete extends Component {
   static propTypes = {
     suggestions: PropTypes.instanceOf(Array)
@@ -18,7 +19,7 @@ export class Autocomplete extends Component {
       showSuggestions: false,
       userInput: ""
     };
-    this.autocompleteSearchDebounced = debounce(250, this.autocompleteSearch);
+    this.autocompleteSearchDebounced = debounce(debounceTime, this.autocompleteSearch);
   }
 
   autocompleteSearch = async (userInput) => {
@@ -32,15 +33,13 @@ export class Autocomplete extends Component {
             this.setState({
                 activeSuggestion: 0,
                 filteredSuggestions,
-                showSuggestions: true,
-                userInput: userInput
+                showSuggestions: true
             });
         } else {
             this.setState({
                 activeSuggestion: 0,
                 filteredSuggestions,
-                showSuggestions: false,
-                userInput: userInput
+                showSuggestions: false
             });
         }
   }
@@ -49,6 +48,9 @@ export class Autocomplete extends Component {
     const userInput = e.currentTarget.value;
     let filteredSuggestions = [];
     if(userInput.length > 3) {
+        this.setState({
+            userInput: userInput
+        });
         this.autocompleteSearchDebounced(userInput)
     }
     else {
