@@ -24,7 +24,7 @@ export class Autocomplete extends Component {
 
   autocompleteSearch = async (userInput) => {
         let filteredSuggestions = [];
-        const response = await axios.get(`https://www.omdbapi.com/?apikey=81df2a82&s=${userInput}`);
+        const response = await axios.get(`https://www.omdbapi.com/?apikey=81df2a82&s=${encodeURI(userInput)}`);
         if(response.data.Response === 'True') {
             filteredSuggestions = response.data.Search.map(obj => {
                 return obj.Title;
@@ -39,7 +39,7 @@ export class Autocomplete extends Component {
             this.setState({
                 activeSuggestion: 0,
                 filteredSuggestions,
-                showSuggestions: false
+                showSuggestions: true
             });
         }
   }
@@ -95,11 +95,29 @@ export class Autocomplete extends Component {
     }
   };
 
+  onBlur= () => {
+    if(!this.state.className) {
+        this.setState({
+            className: 'hide'
+        })
+    }
+  }
+
+  onFocus = () => {
+    if(this.state.className) {
+        this.setState({
+            className: ''
+        })
+    }
+  }
+
   render() {
     const {
       onChange,
       onClick,
       onKeyDown,
+      onBlur,
+      onFocus,
       state: {
         activeSuggestion,
         filteredSuggestions,
@@ -111,16 +129,16 @@ export class Autocomplete extends Component {
     if (showSuggestions && userInput) {
       if (filteredSuggestions.length) {
         suggestionsListComponent = (
-          <ul className="suggestions">
+          <ul className={"suggestions " + this.state.className}>
             {filteredSuggestions.map((suggestion, index) => {
               let className;
 
               if (index === activeSuggestion) {
-                className = "";
+                className = "highlight";
               }
 
               return (
-                <li key={suggestion} onClick={onClick}>
+                <li key={index} onClick={onClick} className={className}>
                   {suggestion}
                 </li>
               );
@@ -129,20 +147,23 @@ export class Autocomplete extends Component {
         );
       } else {
         suggestionsListComponent = (
-          <div className="no-suggestions">
-            <em>No suggestions</em>
-          </div>
+          <ul className="suggestions">
+            <li>No suggestions</li>
+          </ul>
         );
       }
     }
 
     return (
       <React.Fragment>
+        <h3>AutoComplete</h3>  
         <input
           className="searchbox"
           type="search"
           onChange={onChange}
           onKeyDown={onKeyDown}
+          onBlur={onBlur}
+          onFocus={onFocus}
           value={userInput}
         />
         {suggestionsListComponent}

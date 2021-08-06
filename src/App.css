@@ -88,6 +88,14 @@ ul li:hover {
   height: 0;
 }
 
+.highlight {
+  border:1px solid #e23222;
+}
+
+.hide {
+  display: none;
+}
+
 input[type="search"]:focus + .suggestions li {
   height: 20px;
 }
