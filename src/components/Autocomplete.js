@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import axios from 'axios';
+import { debounce } from "throttle-debounce";
 
 export class Autocomplete extends Component {
   static propTypes = {
@@ -17,15 +18,12 @@ export class Autocomplete extends Component {
       showSuggestions: false,
       userInput: ""
     };
+    this.autocompleteSearchDebounced = debounce(250, this.autocompleteSearch);
   }
 
-  onChange = async (e) => {
-    //const { suggestions } = this.props;
-    const userInput = e.currentTarget.value;
-    let filteredSuggestions = []
-    if(userInput.length > 3) {
+  autocompleteSearch = async (userInput) => {
+        let filteredSuggestions = [];
         const response = await axios.get(`https://www.omdbapi.com/?apikey=81df2a82&s=${userInput}`);
-        console.log(response.data);
         if(response.data.Response === 'True') {
             filteredSuggestions = response.data.Search.map(obj => {
                 return obj.Title;
@@ -45,6 +43,13 @@ export class Autocomplete extends Component {
                 userInput: userInput
             });
         }
+  }
+
+  onChange = async (e) => {
+    const userInput = e.currentTarget.value;
+    let filteredSuggestions = [];
+    if(userInput.length > 3) {
+        this.autocompleteSearchDebounced(userInput)
     }
     else {
         this.setState({
@@ -132,6 +137,7 @@ export class Autocomplete extends Component {
     return (
       <React.Fragment>
         <input
+          className="searchbox"
           type="search"
           onChange={onChange}
           onKeyDown={onKeyDown}
