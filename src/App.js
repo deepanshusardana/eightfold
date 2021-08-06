@@ -9,4 +9,10 @@ function App() {
   );
 }
 
+/To do list/
+// Memoize results
+// onStartMatch - typed string only matches chars at beginning
+// onEndMatch - typed string only matches chars at end
+// add loading behaviour when network call is happening
+
 export default App;
