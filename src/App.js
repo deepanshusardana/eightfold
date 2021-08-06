@@ -9,7 +9,7 @@ function App() {
   );
 }
 
-/To do list/
+// To do list
 // Memoize results
 // onStartMatch - typed string only matches chars at beginning
 // onEndMatch - typed string only matches chars at end
